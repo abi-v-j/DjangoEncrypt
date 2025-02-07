@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text & File Encryption Tool</title>
+</head>
+<body>
+
+    <h2>Generate a Secure Encryption Key</h2>
+    <form action="{% url 'generate_key' %}" method="GET">
+        <button type="submit">Generate Key</button>
+    </form>
+
+    {% if generated_key %}
+        <p><strong>Generated Key:</strong> <input type="text" value="{{ generated_key }}" readonly></p>
+    {% endif %}
+
+    <hr>
+
+    <h2>Encrypt Text</h2>
+    <form action="{% url 'encrypt' %}" method="POST">
+        {% csrf_token %}
+        <textarea name="text" placeholder="Enter text to encrypt" required></textarea>
+        <input type="text" name="key" placeholder="Enter encryption key" required>
+        <button type="submit">Encrypt</button>
+    </form>
+
+    {% if encrypted_text %}
+        <h3>Encrypted Text:</h3>
+        <textarea readonly>{{ encrypted_text }}</textarea>
+    {% endif %}
+
+    <hr>
+
+    <h2>Decrypt Text</h2>
+    <form action="{% url 'decrypt' %}" method="POST">
+        {% csrf_token %}
+        <textarea name="encrypted_text" placeholder="Enter encrypted text" required></textarea>
+        <input type="text" name="key" placeholder="Enter decryption key" required>
+        <button type="submit">Decrypt</button>
+    </form>
+
+    {% if decrypted_text %}
+        <h3>Decrypted Text:</h3>
+        <textarea readonly>{{ decrypted_text }}</textarea>
+    {% endif %}
+
+    <hr>
+
+    <h2>Encrypt File</h2>
+    <form action="{% url 'encrypt_file' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="file" required>
+        <input type="text" name="key" placeholder="Enter encryption key" required>
+        <button type="submit">Encrypt File</button>
+    </form>
+
+    {% if encrypted_file %}
+        <p>Encrypted File: <strong>{{ encrypted_file }}</strong></p>
+    {% endif %}
+
+    <hr>
+
+    <h2>Decrypt File</h2>
+    <form action="{% url 'decrypt_file' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="file" required>
+        <input type="text" name="key" placeholder="Enter decryption key" required>
+        <button type="submit">Decrypt File</button>
+    </form>
+
+    {% if decrypted_file %}
+        <p>Decrypted File: <strong>{{ decrypted_file }}</strong></p>
+    {% endif %}
+
+
+    <h2>Encrypt Folder</h2>
+    <form action="{% url 'encrypt_folder' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="folder" webkitdirectory directory multiple required>
+        <input type="text" name="key" placeholder="Enter encryption key" required>
+        <button type="submit">Encrypt Folder</button>
+    </form>
+
+    {% if encrypted_folder %}
+        <p>Encrypted Folder: <strong>{{ encrypted_folder }}</strong></p>
+    {% endif %}
+
+    <hr>
+
+    <h2>Decrypt Folder</h2>
+    <form action="{% url 'decrypt_folder' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="folder" required>
+        <input type="text" name="key" placeholder="Enter decryption key" required>
+        <button type="submit">Decrypt Folder</button>
+    </form>
+
+    {% if decrypted_folder %}
+        <p>Decrypted Folder: <strong>{{ decrypted_folder }}</strong></p>
+    {% endif %}
+
+    {% if error %}
+        <p style="color: red;"><strong>Error:</strong> {{ error }}</p>
+    {% endif %}
+
+  
+
+</body>
+</html>
